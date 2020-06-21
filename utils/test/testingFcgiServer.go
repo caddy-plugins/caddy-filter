@@ -2,7 +2,7 @@ package test
 
 import (
 	"fmt"
-	"github.com/echocat/caddy-filter/utils/fcgi"
+	"github.com/caddy-plugins/caddy-filter/utils/fcgi"
 	"log"
 	"net"
 	"net/http"

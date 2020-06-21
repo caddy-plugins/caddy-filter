@@ -11,7 +11,7 @@ import (
 	_ "github.com/caddyserver/caddy/caddyhttp/proxy"
 	_ "github.com/caddyserver/caddy/caddyhttp/redirect"
 	_ "github.com/caddyserver/caddy/caddyhttp/root"
-	"github.com/echocat/caddy-filter/utils/test"
+	"github.com/caddy-plugins/caddy-filter/utils/test"
 	. "github.com/echocat/gocheck-addons"
 	. "gopkg.in/check.v1"
 	"io"
