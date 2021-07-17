@@ -2,11 +2,12 @@ package filter
 
 import (
 	"errors"
-	"github.com/caddyserver/caddy"
-	"github.com/caddyserver/caddy/caddyhttp/httpserver"
-	. "gopkg.in/check.v1"
 	"regexp"
 	"regexp/syntax"
+
+	"github.com/admpub/caddy"
+	"github.com/admpub/caddy/caddyhttp/httpserver"
+	. "gopkg.in/check.v1"
 )
 
 type initTest struct{}

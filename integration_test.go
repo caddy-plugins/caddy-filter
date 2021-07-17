@@ -2,21 +2,22 @@ package filter
 
 import (
 	"fmt"
-	_ "github.com/caddyserver/caddy/caddyhttp/basicauth"
-	_ "github.com/caddyserver/caddy/caddyhttp/errors"
-	_ "github.com/caddyserver/caddy/caddyhttp/fastcgi"
-	_ "github.com/caddyserver/caddy/caddyhttp/gzip"
-	_ "github.com/caddyserver/caddy/caddyhttp/log"
-	_ "github.com/caddyserver/caddy/caddyhttp/markdown"
-	_ "github.com/caddyserver/caddy/caddyhttp/proxy"
-	_ "github.com/caddyserver/caddy/caddyhttp/redirect"
-	_ "github.com/caddyserver/caddy/caddyhttp/root"
-	"github.com/caddy-plugins/caddy-filter/utils/test"
-	. "github.com/echocat/gocheck-addons"
-	. "gopkg.in/check.v1"
 	"io"
 	"io/ioutil"
 	"net/http"
+
+	_ "github.com/admpub/caddy/caddyhttp/basicauth"
+	_ "github.com/admpub/caddy/caddyhttp/errors"
+	_ "github.com/admpub/caddy/caddyhttp/fastcgi"
+	_ "github.com/admpub/caddy/caddyhttp/gzip"
+	_ "github.com/admpub/caddy/caddyhttp/log"
+	_ "github.com/admpub/caddy/caddyhttp/markdown"
+	_ "github.com/admpub/caddy/caddyhttp/proxy"
+	_ "github.com/admpub/caddy/caddyhttp/redirect"
+	_ "github.com/admpub/caddy/caddyhttp/root"
+	"github.com/caddy-plugins/caddy-filter/utils/test"
+	. "github.com/echocat/gocheck-addons"
+	. "gopkg.in/check.v1"
 )
 
 type integrationTest struct {

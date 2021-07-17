@@ -3,12 +3,13 @@ package test
 import (
 	"flag"
 	"fmt"
-	"github.com/caddyserver/caddy"
 	"io"
 	"log"
 	"os"
 	"os/exec"
 	"time"
+
+	"github.com/admpub/caddy"
 )
 
 var (

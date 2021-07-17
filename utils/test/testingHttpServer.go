@@ -3,10 +3,11 @@ package test
 import (
 	"compress/gzip"
 	"fmt"
-	"github.com/NYTimes/gziphandler"
 	"net"
 	"net/http"
 	"strings"
+
+	"github.com/NYTimes/gziphandler"
 )
 
 // TestingHttpServer represents a http server for testing purposes
