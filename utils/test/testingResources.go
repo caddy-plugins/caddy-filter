@@ -2,7 +2,7 @@ package test
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"path/filepath"
 )
@@ -11,7 +11,7 @@ import (
 func TestingResourceContentOf(name string) []byte {
 	f := TestingResourceOf(name)
 	defer f.Close()
-	bytes, err := ioutil.ReadAll(f)
+	bytes, err := io.ReadAll(f)
 	if err != nil {
 		panic(fmt.Sprintf("Could not read testing resource '%s'. Got: %v", name, err))
 	}

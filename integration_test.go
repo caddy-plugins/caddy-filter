@@ -3,7 +3,6 @@ package filter
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 
 	_ "github.com/admpub/caddy/caddyhttp/basicauth"
@@ -35,7 +34,7 @@ func (s *integrationTest) Test_static(c *C) {
 	c.Assert(err, IsNil)
 
 	defer resp.Body.Close()
-	content, err := ioutil.ReadAll(resp.Body)
+	content, err := io.ReadAll(resp.Body)
 	c.Assert(err, IsNil)
 	c.Assert(string(content), Equals, "Hello replaced world!\n")
 
@@ -55,7 +54,7 @@ func (s *integrationTest) Test_staticWithUtf8(c *C) {
 	c.Assert(err, IsNil)
 
 	defer resp.Body.Close()
-	content, err := ioutil.ReadAll(resp.Body)
+	content, err := io.ReadAll(resp.Body)
 	c.Assert(err, IsNil)
 	c.Assert(string(content), Equals, "电视\n")
 }
@@ -65,7 +64,7 @@ func (s *integrationTest) Test_staticWithBasicAuth(c *C) {
 	c.Assert(err, IsNil)
 
 	defer resp.Body.Close()
-	content, err := ioutil.ReadAll(resp.Body)
+	content, err := io.ReadAll(resp.Body)
 	c.Assert(err, IsNil)
 	c.Assert(string(content), Equals, "401 Unauthorized\n")
 	c.Assert(resp.StatusCode, Equals, 401)
@@ -76,7 +75,7 @@ func (s *integrationTest) Test_staticWithGzip(c *C) {
 	c.Assert(err, IsNil)
 
 	defer resp.Body.Close()
-	content, err := ioutil.ReadAll(resp.Body)
+	content, err := io.ReadAll(resp.Body)
 	c.Assert(err, IsNil)
 	c.Assert(string(content), Equals, "Hello replaced world!\n")
 
@@ -113,7 +112,7 @@ func (s *integrationTest) Test_proxy(c *C) {
 	c.Assert(err, IsNil)
 
 	defer resp.Body.Close()
-	content, err := ioutil.ReadAll(resp.Body)
+	content, err := io.ReadAll(resp.Body)
 	c.Assert(err, IsNil)
 	c.Assert(string(content), Equals, "Hello replaced world!")
 }
@@ -125,7 +124,7 @@ func (s *integrationTest) Test_proxyWithGzip(c *C) {
 	c.Assert(err, IsNil)
 
 	defer resp.Body.Close()
-	content, err := ioutil.ReadAll(resp.Body)
+	content, err := io.ReadAll(resp.Body)
 	c.Assert(err, IsNil)
 	c.Assert(string(content), Equals, "Hello replaced world!")
 }
@@ -137,7 +136,7 @@ func (s *integrationTest) Test_proxyWithGzipUpstream(c *C) {
 	c.Assert(err, IsNil)
 
 	defer resp.Body.Close()
-	content, err := ioutil.ReadAll(resp.Body)
+	content, err := io.ReadAll(resp.Body)
 	c.Assert(err, IsNil)
 	c.Assert(string(content), Equals, "Hello replaced world!")
 }
@@ -149,7 +148,7 @@ func (s *integrationTest) Test_fastcgi(c *C) {
 	c.Assert(err, IsNil)
 
 	defer resp.Body.Close()
-	content, err := ioutil.ReadAll(resp.Body)
+	content, err := io.ReadAll(resp.Body)
 	c.Assert(err, IsNil)
 	c.Assert(string(content), Contains, "<title>Hello replaced world!</title>")
 }
@@ -161,7 +160,7 @@ func (s *integrationTest) Test_fastcgiWithGzip(c *C) {
 	c.Assert(err, IsNil)
 
 	defer resp.Body.Close()
-	content, err := ioutil.ReadAll(resp.Body)
+	content, err := io.ReadAll(resp.Body)
 	c.Assert(err, IsNil)
 	c.Assert(string(content), Contains, "<title>Hello replaced world!</title>")
 }
@@ -181,7 +180,7 @@ func (s *integrationTest) Test_fastcgiWithRedirect(c *C) {
 	c.Assert(err, IsNil)
 
 	defer resp.Body.Close()
-	content, err := ioutil.ReadAll(resp.Body)
+	content, err := io.ReadAll(resp.Body)
 	c.Assert(err, IsNil)
 	c.Assert(resp.StatusCode, Equals, 301)
 	c.Assert(resp.Status, Equals, "301 Moved Permanently")
@@ -191,7 +190,7 @@ func (s *integrationTest) Test_fastcgiWithRedirect(c *C) {
 	resp2, err := http.Get("http://caddyserver.com")
 	c.Assert(err, IsNil)
 	defer resp2.Body.Close()
-	content, err = ioutil.ReadAll(resp2.Body)
+	content, err = io.ReadAll(resp2.Body)
 	c.Assert(err, IsNil)
 	c.Assert(resp.StatusCode, Equals, 301)
 	c.Assert(string(content), Contains, "<title>Caddy - ")
@@ -199,7 +198,7 @@ func (s *integrationTest) Test_fastcgiWithRedirect(c *C) {
 	resp3, err := http.Get("http://localhost:22782/redirect.cgi")
 	c.Assert(err, IsNil)
 	defer resp3.Body.Close()
-	content, err = ioutil.ReadAll(resp3.Body)
+	content, err = io.ReadAll(resp3.Body)
 	c.Assert(err, IsNil)
 	c.Assert(resp.StatusCode, Equals, 301)
 	c.Assert(string(content), Contains, "<title>Replaced another!</title>")
@@ -210,7 +209,7 @@ func (s *integrationTest) Test_markdown(c *C) {
 	c.Assert(err, IsNil)
 
 	defer resp.Body.Close()
-	content, err := ioutil.ReadAll(resp.Body)
+	content, err := io.ReadAll(resp.Body)
 	c.Assert(err, IsNil)
 	c.Assert(string(content), Contains, "<title>Hello replaced world!</title>")
 }
@@ -220,7 +219,7 @@ func (s *integrationTest) Test_markdownWithGzip(c *C) {
 	c.Assert(err, IsNil)
 
 	defer resp.Body.Close()
-	content, err := ioutil.ReadAll(resp.Body)
+	content, err := io.ReadAll(resp.Body)
 	c.Assert(err, IsNil)
 	c.Assert(string(content), Contains, "<title>Hello replaced world!</title>")
 }

@@ -5,7 +5,7 @@ import (
 	"bytes"
 	"compress/gzip"
 	"errors"
-	"io/ioutil"
+	"io"
 	"net"
 	"net/http"
 	"strings"
@@ -217,7 +217,7 @@ func (instance *responseWriterWrapper) recordedAndDecodeIfRequired() []byte {
 	if err != nil {
 		return result
 	}
-	result, err = ioutil.ReadAll(gzipSrc)
+	result, err = io.ReadAll(gzipSrc)
 	if err != nil {
 		return result
 	}

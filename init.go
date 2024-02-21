@@ -1,7 +1,6 @@
 package filter
 
 import (
-	"io/ioutil"
 	"os"
 	"regexp"
 	"strconv"
@@ -155,7 +154,7 @@ func evalReplacement(controller *caddy.Controller, target *rule) error {
 		target.replacement = []byte(value)
 		if len(target.replacement) > 1 && target.replacement[0] == '@' {
 			targetFilename := string(target.replacement[1:])
-			content, err := ioutil.ReadFile(targetFilename)
+			content, err := os.ReadFile(targetFilename)
 			if err != nil {
 				if !os.IsNotExist(err) {
 					return controller.Errf("Could not read file provided in 'replacement' definition. Got: %v", err)
