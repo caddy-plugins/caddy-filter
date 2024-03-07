@@ -197,16 +197,6 @@ func (instance *responseWriterWrapper) Hijack() (net.Conn, *bufio.ReadWriter, er
 	return nil, nil, httpserver.NonHijackerError{Underlying: instance.delegate}
 }
 
-// CloseNotify implements http.CloseNotifier.
-// It just inherits the underlying ResponseWriter's CloseNotify method.
-// It panics if the underlying ResponseWriter is not a CloseNotifier.
-func (instance *responseWriterWrapper) CloseNotify() <-chan bool {
-	if cn, ok := instance.delegate.(http.CloseNotifier); ok {
-		return cn.CloseNotify()
-	}
-	panic(httpserver.NonCloseNotifierError{Underlying: instance.delegate})
-}
-
 func (instance *responseWriterWrapper) recordedAndDecodeIfRequired() []byte {
 	result := instance.recorded()
 	if !instance.isGzipEncoded() {
