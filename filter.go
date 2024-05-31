@@ -22,8 +22,7 @@ func (instance filterHandler) ServeHTTP(writer http.ResponseWriter, request *htt
 	if request.Method == "GET" && request.Header.Get("Upgrade") == "websocket" {
 		return instance.next.ServeHTTP(writer, request)
 	}
-
-	wrapper := newResponseWriterWrapperFor(writer, func(wrapper *responseWriterWrapper) bool {
+	return RewriteResponse(writer, request, func(wrapper http.ResponseWriter) bool {
 		header := wrapper.Header()
 		for _, rule := range instance.rules {
 			if rule.matches(request, &header) {
@@ -31,9 +30,32 @@ func (instance filterHandler) ServeHTTP(writer http.ResponseWriter, request *htt
 			}
 		}
 		return false
-	})
-	wrapper.maximumBufferSize = instance.maximumBufferSize
-	result, err := instance.next.ServeHTTP(wrapper, request)
+	}, func(wrapper http.ResponseWriter) (bool, []byte) {
+		var body []byte
+		var bodyRetrieved bool
+		header := wrapper.Header()
+		wrapperd := wrapper.(*responseWriterWrapper)
+		for _, rule := range instance.rules {
+			if rule.matches(request, &header) {
+				if !bodyRetrieved {
+					body = wrapperd.RecordedAndDecodeIfRequired()
+					bodyRetrieved = true
+				}
+				body = rule.execute(request, &header, body)
+			}
+		}
+		return bodyRetrieved, body
+	}, instance.maximumBufferSize, instance.next)
+}
+
+func RewriteResponse(writer http.ResponseWriter, request *http.Request,
+	beforeFirstWrite func(http.ResponseWriter) bool,
+	bodyIsRetrieved func(http.ResponseWriter) (bool, []byte),
+	maximumBufferSize int, next httpserver.Handler) (int, error) {
+
+	wrapper := newResponseWriterWrapperFor(writer, beforeFirstWrite)
+	wrapper.maximumBufferSize = maximumBufferSize
+	result, err := next.ServeHTTP(wrapper, request)
 	if wrapper.skipped {
 		return result, err
 	}
@@ -55,18 +77,7 @@ func (instance filterHandler) ServeHTTP(writer http.ResponseWriter, request *htt
 	if !wrapper.isBodyAllowed() {
 		return result, logError
 	}
-	header := wrapper.Header()
-	var body []byte
-	bodyRetrieved := false
-	for _, rule := range instance.rules {
-		if rule.matches(request, &header) {
-			if !bodyRetrieved {
-				body = wrapper.recordedAndDecodeIfRequired()
-				bodyRetrieved = true
-			}
-			body = rule.execute(request, &header, body)
-		}
-	}
+	bodyRetrieved, body := bodyIsRetrieved(wrapper)
 	var n int
 	if bodyRetrieved {
 		oldContentLength := wrapper.Header().Get("Content-Length")

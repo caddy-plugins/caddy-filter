@@ -2,9 +2,10 @@ package filter
 
 import (
 	"bytes"
-	. "gopkg.in/check.v1"
 	"net/http"
 	"reflect"
+
+	. "gopkg.in/check.v1"
 )
 
 type responseWriterWrapperTest struct{}
@@ -15,7 +16,7 @@ func init() {
 
 func (s *responseWriterWrapperTest) Test_newResponseWriterWrapperFor(c *C) {
 	original := newMockResponseWriter()
-	beforeFirstWrite := func(*responseWriterWrapper) bool {
+	beforeFirstWrite := func(http.ResponseWriter) bool {
 		return false
 	}
 	wrapper := newResponseWriterWrapperFor(original, beforeFirstWrite)
@@ -75,7 +76,7 @@ func (s *responseWriterWrapperTest) Test_bodyAllowedForStatus(c *C) {
 func (s *responseWriterWrapperTest) Test_WriteWithoutRecording(c *C) {
 	beforeFirstWriteCalled := false
 	original := newMockResponseWriter()
-	beforeFirstWrite := func(*responseWriterWrapper) bool {
+	beforeFirstWrite := func(http.ResponseWriter) bool {
 		beforeFirstWriteCalled = true
 		return false
 	}
@@ -107,7 +108,7 @@ func (s *responseWriterWrapperTest) Test_WriteWithoutRecording(c *C) {
 func (s *responseWriterWrapperTest) Test_WriteWithRecording(c *C) {
 	beforeFirstWriteCalled := false
 	original := newMockResponseWriter()
-	beforeFirstWrite := func(*responseWriterWrapper) bool {
+	beforeFirstWrite := func(http.ResponseWriter) bool {
 		beforeFirstWriteCalled = true
 		return true
 	}
@@ -138,7 +139,7 @@ func (s *responseWriterWrapperTest) Test_WriteWithRecording(c *C) {
 
 func (s *responseWriterWrapperTest) Test_WriteWithBufferOverflow(c *C) {
 	original := newMockResponseWriter()
-	beforeFirstWrite := func(*responseWriterWrapper) bool {
+	beforeFirstWrite := func(http.ResponseWriter) bool {
 		return true
 	}
 	wrapper := newResponseWriterWrapperFor(original, beforeFirstWrite)

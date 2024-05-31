@@ -13,7 +13,7 @@ import (
 	"github.com/admpub/caddy/caddyhttp/httpserver"
 )
 
-func newResponseWriterWrapperFor(delegate http.ResponseWriter, beforeFirstWrite func(*responseWriterWrapper) bool) *responseWriterWrapper {
+func newResponseWriterWrapperFor(delegate http.ResponseWriter, beforeFirstWrite func(http.ResponseWriter) bool) *responseWriterWrapper {
 	wrapper := &responseWriterWrapper{
 		skipped:             false,
 		delegate:            delegate,
@@ -39,7 +39,7 @@ type responseWriterWrapper struct {
 	skipped             bool
 	delegate            http.ResponseWriter
 	buffer              *bytes.Buffer
-	beforeFirstWrite    func(*responseWriterWrapper) bool
+	beforeFirstWrite    func(http.ResponseWriter) bool
 	bodyAllowed         bool
 	firstContentWritten bool
 	headerSetAtDelegate bool
@@ -197,7 +197,7 @@ func (instance *responseWriterWrapper) Hijack() (net.Conn, *bufio.ReadWriter, er
 	return nil, nil, httpserver.NonHijackerError{Underlying: instance.delegate}
 }
 
-func (instance *responseWriterWrapper) recordedAndDecodeIfRequired() []byte {
+func (instance *responseWriterWrapper) RecordedAndDecodeIfRequired() []byte {
 	result := instance.recorded()
 	if !instance.isGzipEncoded() {
 		return result
