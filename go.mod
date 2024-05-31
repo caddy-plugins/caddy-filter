@@ -2,8 +2,6 @@ module github.com/caddy-plugins/caddy-filter
 
 go 1.21
 
-toolchain go1.21.6
-
 require (
 	github.com/NYTimes/gziphandler v1.1.1
 	github.com/admpub/caddy v1.2.0
